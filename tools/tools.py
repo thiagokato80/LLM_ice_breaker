@@ -41,9 +41,17 @@
 #     res = search.run(f"{name}")
 #     return res
 
+
+# Tavily has a nice integration with LinkedIn. So Tavily is an API, a search API,
+# which is highly optimized for generative AI workloads. So if we're using LLM agents 
+# like we're doing right now or building RAG application, retrieval augmentation generation,
+# which we do in the second part of the course. So this search engine is highly optimized
+# for those kind of applications. So it not only uses those search engines like Google and Bing,
+# but it also has pre-built implemented logic of taking our questions and figuring out
+# what is the best answer that we're looking for that would suit us for our generative AI application.
 from langchain_community.tools.tavily_search import TavilySearchResults
 
-
+# the argument does not need to be a name, it can be a text
 def get_profile_url_tavily(name: str):
     """Searches for Linkedin or twitter Profile Page."""
     search = TavilySearchResults()
