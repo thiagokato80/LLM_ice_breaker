@@ -1,7 +1,8 @@
 from typing import List, Dict, Any
 
 from langchain.output_parsers import PydanticOutputParser
-from langchain_core.pydantic_v1 import BaseModel, Field
+#from langchain_core.pydantic_v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 
 
 class Summary(BaseModel):
@@ -11,7 +12,7 @@ class Summary(BaseModel):
     def to_dict(self) -> Dict[str, Any]:
         return {"summary": self.summary, "facts": self.facts}
 
-"""
+
 class IceBreaker(BaseModel):
     ice_breakers: List[str] = Field(description="ice breaker list")
 
@@ -26,8 +27,8 @@ class TopicOfInterest(BaseModel):
 
     def to_dict(self) -> Dict[str, Any]:
         return {"topics_of_interest": self.topics_of_interest}
-"""
+
 
 summary_parser = PydanticOutputParser(pydantic_object=Summary)
-#ice_breaker_parser = PydanticOutputParser(pydantic_object=IceBreaker)
-#topics_of_interest_parser = PydanticOutputParser(pydantic_object=TopicOfInterest)
+ice_breaker_parser = PydanticOutputParser(pydantic_object=IceBreaker)
+topics_of_interest_parser = PydanticOutputParser(pydantic_object=TopicOfInterest)
