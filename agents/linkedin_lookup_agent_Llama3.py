@@ -27,7 +27,7 @@ from langchain.agents import (
 # super important when we write the tools, because the LLM is going to be using that description.
 from langchain_core.tools import Tool
 
-from langchain_openai import ChatOpenAI
+from langchain_community.llms import Ollama
 from langchain.prompts.prompt import PromptTemplate
 from dotenv import load_dotenv
 
@@ -39,10 +39,10 @@ load_dotenv()
 #
 def lookup(name: str) -> str:
     
-    llm = ChatOpenAI(
+    llm = Ollama(
         temperature=0,
-        model_name="gpt-3.5-turbo",
-        openai_api_key=os.environ["OPENAI_API_KEY"],
+        #model="llama3",
+        model="llama2",
     )
 
     # Provide the template thsy we're going to supply our ptompt template
@@ -61,7 +61,7 @@ def lookup(name: str) -> str:
             # name argument, name that out agent is going to refer to this tool
             # and is going to be supplied to the reasoning engine
             # and is going to be displayed in the logs
-            name="Crawl Google 4 linkedin profile page",
+            name="Crawl Llama3 for linkedin profile page",
             # Python function that this tool will run
             func=get_profile_url_tavily,
             # description is super important, because that's how the LLM is going to
@@ -119,3 +119,8 @@ def lookup(name: str) -> str:
 
     linked_profile_url = result["output"]
     return linked_profile_url
+
+if __name__ == "__main__":
+    #load_dotenv()
+    resultado = lookup("Thiago Seiki Kato")
+    print(resultado)
