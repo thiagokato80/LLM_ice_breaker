@@ -11,7 +11,8 @@ def scrapeLinkedIn(name):
     
     # avalia se o arquivo json já está gravado, se sim, retorna os dados do arquivo
 	diretorio = 'G:/Meu Drive/Estudo/Cursos/LangChain/ice_breaker/third_parties/'
-	fname = f"{diretorio}{name}.json"
+	fname = f"{diretorio}{"thiago-seiki-kato-93a12b"}.json"
+	#fname = f"{diretorio}{name}.json"
 	
 	if os.path.isfile(fname):
 		with open(fname, 'r') as fh:

@@ -46,8 +46,8 @@ def lookup(name: str) -> str:
     )
 
     # Provide the template thsy we're going to supply our ptompt template
-    template = """given the full name {name_of_person} I want you to get it me a link to their Linkedin profile page.
-                          Your answer should contain only a URL"""
+    template = """given the full name {name_of_person} I want you to get me the Linkedin profile page.
+    Your answer should contain only a URL"""
 
     # Initialize the prompt template from the template wrote above.
     prompt_template = PromptTemplate(
@@ -61,9 +61,10 @@ def lookup(name: str) -> str:
             # name argument, name that out agent is going to refer to this tool
             # and is going to be supplied to the reasoning engine
             # and is going to be displayed in the logs
-            name="Crawl Llama3 for linkedin profile page",
+            #name="Crawl Llama3 for linkedin profile page",
+            name="Use Google to get Linkedin profile page",
             # Python function that this tool will run
-            func=get_profile_url_tavily,
+            func=get_profile_url_tavily(),
             # description is super important, because that's how the LLM is going to
             # determine whether to use this tool or not.
             # we want the description to be as concise and to have as much information

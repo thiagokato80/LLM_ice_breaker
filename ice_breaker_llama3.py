@@ -1,11 +1,13 @@
 from dotenv import load_dotenv
 
 import langchain
+from typing import Tuple
 
 from langchain_community.llms import Ollama
 from langchain_core.prompts import PromptTemplate
 
 from agents.linkedin_lookup_agent_Llama3 import lookup as linkedin_lookup_agent
+#from agents.linkedin_lookup_agent_A21 import lookup as linkedin_lookup_agent
 
 #from third_parties.linkedin import scrape_linkedin_profile
 # este está melhor pois pega as informações contidas em um arquivo json na máquina
@@ -20,8 +22,8 @@ from third_parties.LinkedIn_Scrap2 import scrapeLinkedIn
 # and create one single coherent application
 # Chains allow us to combine things together
 
-from langchain.chains import LLMChain
-from output_parsers import summary_parser, Summary, ice_breaker_parser, topics_of_interest_parser
+#from langchain.chains import LLMChain
+from output_parsers import summary_parser, Summary#, ice_breaker_parser, topics_of_interest_parser
 
 # USANDO LLAMA ONLINE
 #import transformers
@@ -31,12 +33,14 @@ from output_parsers import summary_parser, Summary, ice_breaker_parser, topics_o
 from langchain_ai21 import AI21LLM
 
 
-def ice_breaker_with(name: str) -> Summary:
+def ice_breaker_with(name: str) -> Tuple[Summary, str]:
 #def ice_breaker_with(name: str) -> str:
     # não estou utilizando para buscar o id do linkedin pois não tenho crédito
     #linkedin_username = linkedin_lookup_agent(name=name)
+    #print(linkedin_username)
     #linkedin_data = scrape_linkedin_profile(linkedin_profile_url=linkedin_username)
-    linkedin_data = scrapeLinkedIn(name="thiago-seiki-kato-93a12b")
+    #linkedin_data = scrapeLinkedIn(name=linkedin_username)
+    linkedin_data = scrapeLinkedIn(name=name)
 
     summary_template = """
     Given the information about a person: \n{informacao}
@@ -56,8 +60,9 @@ def ice_breaker_with(name: str) -> Summary:
     #summary_prompt_template = PromptTemplate.from_template(summary_template)
     
     #llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
+    
     # other open source LLM: Llamma.cppp, Athropic law, AI21, GCP Pump2
-    llm = AI21LLM(model="j2-ultra", temperature=0, max_tokens=1000)
+    llm = AI21LLM(model="j2-ultra", temperature=0, max_tokens=500)
 
     #llm = Ollama(temperature=0, model="llama2")
     #llm = Ollama(temperature=0, model="llama3")
@@ -73,19 +78,18 @@ def ice_breaker_with(name: str) -> Summary:
     #chain = LLMChain(llm=llm, prompt=summary_prompt_template)
     #chain = LLMChain(llm=llm, prompt=summary_prompt_template, output_parser=summary_parser, return_final_only=True)
     chain = summary_prompt_template | llm | summary_parser
-    #linkedin_data = scrapeLinkedIn(
-        #name='thiago-seiki-kato-93a12b') # este é para o Scrap2
-        #linkedin_profile_url="https://www.linkedin.com/in/thiago-seiki-kato-93a12b/",
-        #mock=False) #alterado para true para pegar as informações do GIST
     
-    summary_and_facts: Summary = chain.invoke(input={"informacao":linkedin_data},)
-    #summary_and_facts = chain.invoke(input={"informacao":linkedin_data},)
+    #summary_and_facts: Summary = chain.invoke(input={"informacao":linkedin_data},)
+    summary_and_facts = chain.invoke(input={"informacao":linkedin_data},)
 
-    #print(summary_and_facts, linkedin_data.get("profile_pic_url"))
+    #print(type(summary_and_facts))
+    #print(summary_and_facts.to_dict())
+    #print(linkedin_data.get("profile_pic_url"))
     return summary_and_facts, linkedin_data.get("profile_pic_url")
+
 
 if __name__ == "__main__":
     load_dotenv()
     print("Ice Breaker Enter")
     ice_breaker_with(name='thiago seiki kato')
-    
+   
